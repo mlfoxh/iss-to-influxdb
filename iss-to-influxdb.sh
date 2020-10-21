@@ -29,13 +29,11 @@ do
 	TIME=$(echo $ISS_POSITION | jq '.timestamp')
 	echo "Timestamp: $TIME"
 	TIME_NANO=$(($TIME * 1000000000))
-	DATETIME=$(date -d @$TIME +"%Y-%m-%d %T")
-	echo "Time: $DATETIME"
 
 	# Send values to InfluxDB
 	echo "Sending values to InfluxDB..."
 	curl -v --output /dev/null -i -XPOST "$INFLUXDB_ADDRESS/write?db=$INFLUXDB_DATABASE&u=$INFLUXDB_USER&p=$INFLUXDB_PASSWORD" --data-binary \
-		"position latitude=$LAT,longitude=$LONG,datetime=\"$DATETIME\" $TIME_NANO"
+		"position latitude=$LAT,longitude=$LONG,time=$TIME $TIME_NANO"
 
 	# Repeat after interval (seconds)
 	echo "Sleeping for $INTERVAL seconds..."
