@@ -1,0 +1,187 @@
+{
+"circleMaxSize": "6",
+"circleMinSize": "1",
+"colors": [
+"#5794F2",
+"#F2495C"
+],
+"datasource": "INFLUXDB-DATABASE",
+"decimals": 2,
+"esMetric": "Count",
+"fieldConfig": {
+"defaults": {
+"custom": {
+"align": null
+},
+"mappings": [],
+"thresholds": {
+"mode": "absolute",
+"steps": [
+{
+"color": "green",
+"value": null
+},
+{
+"color": "red",
+"value": 80
+}
+]
+}
+},
+"overrides": []
+},
+"gridPos": {
+"h": 16,
+"w": 15,
+"x": 0,
+"y": 0
+},
+"id": 2,
+"initialZoom": "2",
+"locationData": "table",
+"mapCenter": "(0°, 0°)",
+"maxDataPoints": 1,
+"pluginVersion": "7.1.4",
+"tableQueryOptions": {
+"geohashField": "geohash",
+"latitudeField": "latitude",
+"longitudeField": "longitude",
+"metricField": "current",
+"queryType": "coordinates"
+},
+"targets": [
+{
+"groupBy": [],
+"hide": false,
+"measurement": "position",
+"orderByTime": "ASC",
+"policy": "default",
+"query": "SELECT last(\"latitude\") AS \"latitude\", \"longitude\", \"latitude\" *0+1 AS \"current\" FROM \"position\" WHERE $timeFilter",
+"rawQuery": false,
+"refId": "B",
+"resultFormat": "table",
+"select": [
+[
+{
+"params": [
+"latitude"
+],
+"type": "field"
+},
+{
+"params": [],
+"type": "last"
+},
+{
+"params": [
+"latitude"
+],
+"type": "alias"
+}
+],
+[
+{
+"params": [
+"longitude"
+],
+"type": "field"
+}
+],
+[
+{
+"params": [
+"latitude"
+],
+"type": "field"
+},
+{
+"params": [
+"*0+1"
+],
+"type": "math"
+},
+{
+"params": [
+"current"
+],
+"type": "alias"
+}
+]
+],
+"tags": [],
+"tz": ""
+},
+{
+"groupBy": [],
+"hide": false,
+"measurement": "position",
+"orderByTime": "ASC",
+"policy": "default",
+"query": "SELECT \"latitude\", \"longitude\", \"latitude\" *0 AS \"current\" FROM \"position\" WHERE $timeFilter",
+"rawQuery": false,
+"refId": "A",
+"resultFormat": "table",
+"select": [
+[
+{
+"params": [
+"latitude"
+],
+"type": "field"
+}
+],
+[
+{
+"params": [
+"longitude"
+],
+"type": "field"
+}
+],
+[
+{
+"params": [
+"latitude"
+],
+"type": "field"
+},
+{
+"params": [
+"*0"
+],
+"type": "math"
+},
+{
+"params": [
+"current"
+],
+"type": "alias"
+}
+]
+],
+"tags": [],
+"tz": ""
+}
+],
+"thresholds": "1",
+"title": "ISS Current Location",
+"transformations": [
+{
+"id": "merge",
+"options": {}
+}
+],
+"type": "grafana-worldmap-panel",
+"valueName": "current",
+"hideEmpty": false,
+"hideZero": false,
+"mapCenterLatitude": 0,
+"mapCenterLongitude": 0,
+"mouseWheelZoom": false,
+"showLegend": false,
+"stickyLabels": false,
+"timeFrom": null,
+"timeShift": null,
+"unitPlural": "",
+"unitSingle": ""
+}
