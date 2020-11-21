@@ -7,7 +7,7 @@
 # Check to see if ENV variables are set, and source config file if not
 if [ -z $INFLUXDB_ADDRESS ]
 then
-	. 'config.test'
+	. config
 	echo "Sourcing variables from config file..."
 else
 	echo "Sourcing ENV variables..."
