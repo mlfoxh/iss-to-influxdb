@@ -7,7 +7,7 @@
 # Check to see if ENV variables are set, and source config file if not
 if [ -z $INFLUXDB_ADDRESS ]
 then
-	. config
+	. 'config.test'
 	echo "Sourcing variables from config file..."
 else
 	echo "Sourcing ENV variables..."
@@ -22,18 +22,22 @@ do
 	echo $ISS_POSITION
 
 	# Parse data for values, strip quotes from lat/long json
-	LAT=$(echo $ISS_POSITION | jq '.iss_position.latitude' | sed 's/"//g')
-	echo "Latitude: $LAT"
-	LONG=$(echo $ISS_POSITION | jq '.iss_position.longitude' | sed 's/"//g')
-	echo "Longitude: $LONG"
-	TIME=$(echo $ISS_POSITION | jq '.timestamp')
-	echo "Timestamp: $TIME"
-	TIME_NANO=$(($TIME * 1000000000))
+	if [ $(echo $ISS_POSITION | jq '.message' | sed 's/"//g') == "success" ]
+	then
+		LAT=$(echo $ISS_POSITION | jq '.iss_position.latitude' | sed 's/"//g')
+		echo "Latitude: $LAT"
+		LONG=$(echo $ISS_POSITION | jq '.iss_position.longitude' | sed 's/"//g')
+		echo "Longitude: $LONG"
+		TIME=$(echo $ISS_POSITION | jq '.timestamp')
+		echo "Timestamp: $TIME"
 
-	# Send values to InfluxDB
-	echo "Sending values to InfluxDB..."
-	curl -v --output /dev/null -i -XPOST "$INFLUXDB_ADDRESS/write?db=$INFLUXDB_DATABASE&u=$INFLUXDB_USER&p=$INFLUXDB_PASSWORD" --data-binary \
-		"position latitude=$LAT,longitude=$LONG $TIME_NANO"
+		TIME_NANO=$(($TIME * 1000000000))
+
+		# Send values to InfluxDB
+		echo "Sending values to InfluxDB..."
+		curl -v --output /dev/null -i -XPOST "$INFLUXDB_ADDRESS/write?db=$INFLUXDB_DATABASE&u=$INFLUXDB_USER&p=$INFLUXDB_PASSWORD" --data-binary \
+			"position latitude=$LAT,longitude=$LONG $TIME_NANO"
+	fi
 
 	# Repeat after interval (seconds)
 	echo "Sleeping for $INTERVAL seconds..."
