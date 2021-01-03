@@ -1,5 +1,7 @@
 FROM python:3-alpine
 
+RUN pip3 install requests
+
 COPY iss-to-influxdb.py /root/iss-to-influxdb.py
 
 ENV LATITUDE=0.0
