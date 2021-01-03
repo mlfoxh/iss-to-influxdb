@@ -1,5 +1,0 @@
-INFLUXDB_ADDRESS="http://influxdb.domain.tld:8086"
-INFLUXDB_DATABASE="database"
-INFLUXDB_USER="user"
-INFLUXDB_PASSWORD="password"
-INTERVAL="15"
