@@ -1,2 +1,2 @@
 # iss-to-influxdb
-Bash script which curls and parses ISS location json data from open-notify, and sends to InfluxDB
+Python script which fetches and parses current ISS location json data from open-notify, calculates the distance and bearing to the ISS from configured location, and sends to InfluxDB

@@ -1,18 +1,16 @@
-FROM alpine:latest
+FROM python:3-alpine
 
-COPY iss-to-influxdb.sh /root/iss-to-influxdb.sh
+COPY iss-to-influxdb.py /root/iss-to-influxdb.py
 
-RUN apk update && apk add \
-    bash \
-    curl \
-    jq
-
+ENV LATITUDE=0.0
+ENV LONGITUDE=0.0
 ENV INFLUXDB_ADDRESS=http://influxdb.domain.tld:8086
 ENV INFLUXDB_DATABASE=database
 ENV INFLUXDB_USER=user
 ENV INFLUXDB_PASSWORD=password
 ENV INTERVAL=15
 
-ENTRYPOINT ["/bin/bash"]
+WORKDIR /root/
 
-CMD ["/root/iss-to-influxdb.sh"]
+ENTRYPOINT [ "python3" ]
+CMD [ "iss-to-influxdb.py" ]
