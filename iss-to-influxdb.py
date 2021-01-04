@@ -54,33 +54,35 @@ def main():
     # loop forever
     while True:
         # get iss position json data
-        data = requests.get('http://api.open-notify.org/iss-now.json').json()
+        try:
+            data = requests.get('http://api.open-notify.org/iss-now.json').json()
 
-        # pull lat/lon and timestamp from data
-        issLat = float(data['iss_position']['latitude'])
-        issLon = float(data['iss_position']['longitude'])
-        timestamp = int(data['timestamp']) * 1000000000
+            # pull lat/lon and timestamp from data
+            issLat = float(data['iss_position']['latitude'])
+            issLon = float(data['iss_position']['longitude'])
+            timestamp = int(data['timestamp']) * 1000000000
 
-        # get distance
-        issDist = getDist(userLat, userLon, issLat, issLon)
+            # get distance
+            issDist = getDist(userLat, userLon, issLat, issLon)
 
-        # get bearing
-        issBearing = getBearing(userLat, userLon, issLat, issLon)
+            # get bearing
+            issBearing = getBearing(userLat, userLon, issLat, issLon)
 
-        # print data for log
-        print("time: ", timestamp)
-        print("lat:", issLat)
-        print("lon: ", issLon)
-        print("distance: ", issDist)
-        print("bearing: ", issBearing)
+            # print data for log
+            print("time: ", timestamp)
+            print("lat:", issLat)
+            print("lon: ", issLon)
+            print("distance: ", issDist)
+            print("bearing: ", issBearing)
 
-        # format data
-        influxData = "position latitude=" + str(issLat) + ",longitude=" + str(issLon) + ",distance=" + str(issDist) + ",bearing=" + str(issBearing) + " " + str(timestamp)
+            # format data
+            influxData = "position latitude=" + str(issLat) + ",longitude=" + str(issLon) + ",distance=" + str(issDist) + ",bearing=" + str(issBearing) + " " + str(timestamp)
 
-        # send data
-        requests.post(url, data = influxData)
+            # send data
+            requests.post(url, data = influxData)
 
-        # wait before looping
-        time.sleep(interval)
+        finally:
+            # wait before looping
+            time.sleep(interval)
 
 main()
